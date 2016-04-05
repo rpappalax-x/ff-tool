@@ -92,4 +92,5 @@ def create_mozprofile(profile_dir, application=None, test_type=None, env=None):
     print(profile.summary())
 
     # this is the path to the created profile
+    print "xxxx => " + full_profile_dir
     return full_profile_dir
