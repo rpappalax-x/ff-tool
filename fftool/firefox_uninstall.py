@@ -58,7 +58,7 @@ class FirefoxUninstall(object):
 
             # If we're on Windows/Cygwin, use the uninstaller.
             if self.config.is_windows():
-                local("\"{0}/uninstall/helper.exe\" -ms".format(path_firefox_app))  # NOQA
+                local('{0}/uninstall/helper.exe" -ms'.format(path_firefox_app))  # NOQA
 
             # Otherwise just `rm -rf` the Firefox folder.
             else:
