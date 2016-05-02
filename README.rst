@@ -1,7 +1,3 @@
-.. role:: raw-latex(raw)
-   :format: latex
-..
-
 ff-tool
 =======
 
@@ -42,8 +38,7 @@ overridden. Use caution if you specify your own profile directory as
 profile cleanup functions can wipe out all profiles in your specified
 directory.
 
-:bangbang: ***NOTE:** This tool is work in progress... DO NOT USE*
-:bangbang:
+**NOTE:** This tool is work in progress... DO NOT USE
 
 Installation
 ------------
@@ -55,7 +50,7 @@ Pre-requisites
 virtualenv installed. Windows users must have Cygwin installed. If using
 Cygwin, you must run it as administrator.
 
-1. Right click on c::raw-latex:`\cygwin`64:raw-latex:`\cygwin`.bat
+1. Right click on c:\\cygwin64\\cygwin.bat
 2. Run as administrator
 
 **NOTE:** You will also need to run the Cygwin setup file to install a
