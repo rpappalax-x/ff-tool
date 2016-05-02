@@ -1,168 +1,191 @@
-# ff-tool
+.. role:: raw-latex(raw)
+   :format: latex
+..
 
-[![Build Status](https://travis-ci.org/rpappalax/ff-tool.svg?branch=master)](https://travis-ci.org/rpappalax/ff-tool)
+ff-tool
+=======
 
-## Summary
+|Build Status|
 
-ff-tool is a Python CLI tool we've created to facilitate browser testing of
-cloud services. It is largely a convenience wrapper we've written around
-these amazing tools/libraries (see note below):
+Summary
+-------
 
-- [mozdownload](https://github.com/mozilla/mozdownload)
-- [mozprofile](https://github.com/mozilla/mozprofile)
+ff-tool is a Python CLI tool we've created to facilitate browser testing
+of cloud services. It is largely a convenience wrapper we've written
+around these amazing tools/libraries (see note below):
 
-Our typical use case is launching various Firefox browser versions with a
-fresh profile and loading custom preferences. This tool enables us to do this
-quickly with a 1-liner from the CLI.
+-  `mozdownload <https://github.com/mozilla/mozdownload>`__
+-  `mozprofile <https://github.com/mozilla/mozprofile>`__
 
-## Features
+Our typical use case is launching various Firefox browser versions with
+a fresh profile and loading custom preferences. This tool enables us to
+do this quickly with a 1-liner from the CLI.
 
-1. DownloadFirefox desktop versions (Nightly, Developer Edition, Beta, Release)
+Features
+--------
+
+1. DownloadFirefox desktop versions (Nightly, Developer Edition, Beta,
+   Release)
 2. Manage profiles
 3. Load test preferences
 
-## Notes
+Notes
+-----
 
 If you plan on creating a tool of your own, please import the above lib
-directly in your script(s). This tool was designed for convenience of our
-team for testing Cloud Services and not intended to be used as a library.
+directly in your script(s). This tool was designed for convenience of
+our team for testing Cloud Services and not intended to be used as a
+library.
 
-Profiles are stored in a temp directory by default which can be overridden.
-Use caution if you specify your own profile directory as profile cleanup
-functions can wipe out all profiles in your specified directory.
+Profiles are stored in a temp directory by default which can be
+overridden. Use caution if you specify your own profile directory as
+profile cleanup functions can wipe out all profiles in your specified
+directory.
 
+:bangbang: ***NOTE:** This tool is work in progress... DO NOT USE*
+:bangbang:
 
-:bangbang: _**NOTE:** This tool is work in progress...  USE AT YOUR OWN RISK_ :bangbang:
+Installation
+------------
 
+Pre-requisites
+~~~~~~~~~~~~~~
 
-## Installation
+**NOTE:** ff-tool requires you have Python 2.7 (not Python 3.x) and
+virtualenv installed. Windows users must have Cygwin installed. If using
+Cygwin, you must run it as administrator.
 
-### Pre-requisites
+1. Right click on c::raw-latex:`\cygwin`64:raw-latex:`\cygwin`.bat
+2. Run as administrator
 
-* Python >= 2.7 and virtualenv (Python 3 not yet supported)
+**NOTE:** You will also need to run the Cygwin setup file to install a
+number of modules including: gcc, make, curl, pycrypto, python2,
+python-dev, etc.
 
-#### Windows Users
+Build
+~~~~~
 
-* ff-tool will work on Windows, but requires quite a bit of setup. 
-* Also, installation behavior for the Firefox binary is different than for other OSes. In particular, ff-tool installs the Firefox binaries into a "\_temp" directory for all OSes (except Windows) to avoid clobbering your working browser.  Unfortunately, the Windows installer
-forces installation into C:\\Program Files. Since both the release and Beta versions of Firefox install into the same place, you also run the risk of installing one over another.
-* Again, <u>use at your own risk</u>!
+.. code:: sh
 
+    $ make build
+    $ source ./venv/bin/activate
 
-#### Windows: Installing Cygwin
- * Download and install [Cygwin](https://cygwin.com/)
- * A number of dependencies must also be installed including: 
-   gcc, make, curl, pycrypto, python2, python-dev, etc.
-     1. Right click on c:\cygwin64\cygwin.bat
-     2. Run as administrator or you will suffer needlessly
+Cleanup
+~~~~~~~
 
+.. code:: sh
 
+    $ deactivate
+    $ make clean
 
+Run
+---
 
-### Build
-```sh
-$ make build
-$ source ./venv/bin/activate
-```
+*When not specified, ff will use defaults*
 
-### Cleanup
-```sh
-$ deactivate
-$ make clean
-```
+Help
+----
 
-## Run
-_When not specified, ff will use defaults_
+.. code:: sh
 
-## Help
-```sh
-$ ff -h
-```
+    $ ff -h
 
-## Launch browser, clean profile
+Launch browser, clean profile
+-----------------------------
 
-* version: Nightly
-* profile_name: \<random\>
-```sh
-$ ff
-```
+-  version: Nightly
+-  profile\_name: <random>
 
-* version: Developer Edition (aurora)
-* profile_name: \<random\>
-```sh
-$ ff -c aurora
-```
+   .. code:: sh
 
-## Launch browser, clean profile, specify profile name
+       $ ff
 
-* version: Nightly
-* profile_name: my_cool_profile1
+-  version: Developer Edition (aurora)
+-  profile\_name: <random>
 
-**NOTE:** If the specified profile exists, we use it, if not we create a new one
-with that name.
+   .. code:: sh
 
-```sh
-$ ff -p my_cool_profile1
-```
+       $ ff -c aurora
 
-# Custom Browser Prefs
+Launch browser, clean profile, specify profile name
+---------------------------------------------------
 
-Firefox provides the ability for a user to change preferences in about:config.
-For testing and automation this can be cumbersome as it usually involves many 
-small steps.
+-  version: Nightly
+-  profile\_name: my\_cool\_profile1
 
-As alternative, ff-tool provides a means for loading these prefs from a root 
-directory you specify via an environment variable.
+**NOTE:** If the specified profile exists, we use it, if not we create a
+new one with that name.
+
+.. code:: sh
+
+    $ ff -p my_cool_profile1
+
+Custom Browser Prefs
+====================
+
+Firefox provides the ability for a user to change preferences in
+about:config. For testing and automation this can be cumbersome as it
+usually involves many small steps.
+
+As alternative, ff-tool provides a means for loading these prefs from a
+root directory you specify via an environment variable.
 
 Example:
-```sh
-$ export PREFS_ROOT_DIR = '../services-test'
-```
+
+.. code:: sh
+
+    $ export PREFS_ROOT_DIR = '../services-test'
 
 Custom prefs must be stored in the following directory/file structure:
-<prefs root dir>/<product name>/<test type>
+//
 
-You must also include a prefs.ini file which specifies the environment(s)
-in which each pref set is used.
+You must also include a prefs.ini file which specifies the
+environment(s) in which each pref set is used.
 
 Example prefs.ini:
-```sh
-[DEFAULT]
-pref_key = pref_value
 
-[dev]
-pref_key = pref_value
+.. code:: sh
 
-[stage]
-pref_key = pref_value
-```
+    [DEFAULT]
+    pref_key = pref_value
 
-# Cloud Services (only)
+    [dev]
+    pref_key = pref_value
 
+    [stage]
+    pref_key = pref_value
 
-## Launch browser, clean profile, specify services-specific options...
+Cloud Services (only)
+=====================
 
-* version: Beta
-* profile_name: my_cool_profile1
-* product: loop-server
-* environment: stage
-* test-type: e2e-test
+Launch browser, clean profile, specify services-specific options...
+-------------------------------------------------------------------
 
-**NOTE:** If the specified profile exists, we use it, if not we create a new one
-with that name.
+-  version: Beta
+-  profile\_name: my\_cool\_profile1
+-  product: loop-server
+-  environment: stage
+-  test-type: e2e-test
 
-```sh
-$ ff -c beta -p my_cool_profile1 -a loop-server -e stage -t e2e-test
-```
+**NOTE:** If the specified profile exists, we use it, if not we create a
+new one with that name.
 
-## Download all browsers, but don't create a profile or launch any browsers...
+.. code:: sh
 
-**NOTE:** This is useful for our daily refresh task where we make sure we have
-the latest browsers installed.
+    $ ff -c beta -p my_cool_profile1 -a loop-server -e stage -t e2e-test
 
-* version: all
-* profile_name: none
+Download all browsers, but don't create a profile or launch any browsers...
+---------------------------------------------------------------------------
 
-```sh
-$ ff -c ALL --install-only
-```
+**NOTE:** This is useful for our daily refresh task where we make sure
+we have the latest browsers installed.
+
+-  version: all
+-  profile\_name: none
+
+.. code:: sh
+
+    $ ff -c ALL --install-only
+
+.. |Build Status| image:: https://travis-ci.org/rpappalax/ff-tool.svg?branch=master
+   :target: https://travis-ci.org/rpappalax/ff-tool
